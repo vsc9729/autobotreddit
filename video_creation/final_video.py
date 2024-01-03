@@ -372,10 +372,18 @@ def make_final_video(
         )  # Prevent a error by limiting the path length, do not change this.
         print_step("Rendering the Only TTS Video 🎥")
         with ProgressFfmpeg(length, on_update_example) as progress:
+            path = defaultPath + f"/{filename}"
+            path = (
+                path[:251] + ".mp4"
+            )  # Prevent an error by limiting the path length, do not change this.
             try:
+                # Apply setpts filter separately for video and audio
+                video_filter = "setpts=1.1*PTS"
+                audio_filter = "atempo=1.1"
+
                 ffmpeg.output(
-                    background_clip,
-                    audio,
+                    background_clip.filter(vf=video_filter),
+                    final_audio.filter("atempo", "1.1"),
                     path,
                     f="mp4",
                     **{
@@ -393,6 +401,7 @@ def make_final_video(
             except ffmpeg.Error as e:
                 print(e.stderr.decode("utf8"))
                 exit(1)
+
 
         old_percentage = pbar.n
         pbar.update(100 - old_percentage)

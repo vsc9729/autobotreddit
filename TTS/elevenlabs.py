@@ -6,14 +6,7 @@ from utils import settings
 
 voices = [
     "Adam",
-    "Antoni",
-    "Arnold",
-    "Bella",
-    "Domi",
-    "Elli",
-    "Josh",
-    "Rachel",
-    "Sam",
+   
 ]
 
 
